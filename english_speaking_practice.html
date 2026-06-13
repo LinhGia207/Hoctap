@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Speaking Practice</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#eef2ff;
+display:flex;
+justify-content:center;
+padding:20px;
+}
+
+.container{
+background:white;
+width:100%;
+max-width:550px;
+padding:20px;
+border-radius:20px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+}
+
+h1{
+text-align:center;
+color:#2563eb;
+}
+
+.subtitle{
+text-align:center;
+margin-bottom:20px;
+color:#555;
+}
+
+.image-box{
+width:100%;
+height:260px;
+overflow:hidden;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+.image-box img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.dialogue{
+background:#eff6ff;
+padding:15px;
+border-left:5px solid #2563eb;
+border-radius:10px;
+margin-bottom:15px;
+}
+
+.options{
+background:#fff7ed;
+padding:15px;
+border-radius:10px;
+margin-bottom:15px;
+border:1px dashed orange;
+}
+
+.option{
+margin:10px 0;
+}
+
+button{
+width:100%;
+padding:15px;
+font-size:16px;
+border:none;
+border-radius:12px;
+background:#2563eb;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.status{
+margin-top:15px;
+background:#f8fafc;
+padding:12px;
+border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎙️ English Speaking Practice</h1>
+<p class="subtitle">Global Success 9 - Communication Practice</p>
+
+<div class="image-box">
+<img id="scene-img" src="village.jpg">
+</div>
+
+<div class="dialogue">
+<b>Phong</b>
+<div id="story-text"></div>
+</div>
+
+<div class="options" id="options-box">
+<b>📢 Read ONE sentence clearly:</b>
+<div id="options-list"></div>
+</div>
+
+<button id="speak-btn">🎤 Tap To Speak</button>
+
+<div class="status">
+<div id="status-text">Ready to practice speaking.</div>
+<div>
+<b>Recognised:</b>
+<span id="result-text">...</span>
+</div>
+</div>
+
+</div>
+
+<script>
+
+const scriptTree = {
+
+'start':{
+text:'Grandpa, I enjoy playing folk games with my cousins, but I still miss using my smartphone.',
+
+img:'village.jpg',
+
+keywords:{
+'folk games':'games_scene',
+'smartphone':'technology_scene',
+'phone':'technology_scene'
+},
+
+options:[
+'I enjoy playing folk games with my cousins.',
+'I still want to use my smartphone.'
+]
+},
+
+'games_scene':{
+
+text:'Grandpa: When I was young, we loved playing outside together. We did not depend on technology to have fun.',
+
+img:'folk_games.jpg',
+
+keywords:{
+'family':'family_scene',
+'memorise':'family_scene',
+'extended family':'family_scene'
+},
+
+options:[
+'I enjoy spending time with my extended family.',
+'I want to memorise these happy moments.'
+]
+},
+
+'technology_scene':{
+
+text:'Grandpa: Technology is useful, but outdoor activities can replace too much screen time.',
+
+img:'smartphone.jpg',
+
+keywords:{
+'replace':'outdoor_scene',
+'outdoor':'outdoor_scene',
+'pursue':'outdoor_scene'
+},
+
+options:[
+'Outdoor activities can replace phone games.',
+'I want to pursue healthier hobbies.'
+]
+},
+
+'family_scene':{
+
+text:'Phong: I enjoy listening to your stories and learning about various folk games. 🎉',
+
+img:'family.jpg',
+
+keywords:{},
+options:[]
+},
+
+'outdoor_scene':{
+
+text:'Phong: I understand now. I should not depend on technology too much. 🌳🎉',
+
+img:'outdoor.jpg',
+
+keywords:{},
+options:[]
+}
+
+};
+
+let currentStage = 'start';
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition;
+
+if(SpeechRecognition){
+
+recognition = new SpeechRecognition();
+recognition.lang = 'en-US';
+
+}else{
+
+alert('Please use Google Chrome.');
+
+}
+
+const storyText = document.getElementById('story-text');
+const sceneImg = document.getElementById('scene-img');
+const optionsList = document.getElementById('options-list');
+const statusText = document.getElementById('status-text');
+const resultText = document.getElementById('result-text');
+const speakBtn = document.getElementById('speak-btn');
+const optionsBox = document.getElementById('options-box');
+
+function updateScene(){
+
+const stage = scriptTree[currentStage];
+
+storyText.innerText = stage.text;
+sceneImg.src = stage.img;
+
+optionsList.innerHTML = '';
+
+if(stage.options.length > 0){
+
+optionsBox.style.display = 'block';
+speakBtn.style.display = 'block';
+
+stage.options.forEach(option=>{
+
+const div = document.createElement('div');
+div.className = 'option';
+div.innerHTML = '👉 <b>' + option + '</b>';
+
+optionsList.appendChild(div);
+
+});
+
+}else{
+
+optionsBox.innerHTML = '<b>🎉 Lesson completed successfully!</b>';
+speakBtn.style.display = 'none';
+
+}
+
+}
+
+speakBtn.addEventListener('click', ()=>{
+
+recognition.start();
+
+});
+
+recognition.onstart = ()=>{
+
+statusText.innerText = '🎤 Listening...';
+
+};
+
+recognition.onresult = (event)=>{
+
+const transcript = event.results[0][0].transcript.toLowerCase();
+
+resultText.innerText = transcript;
+
+const keywords = scriptTree[currentStage].keywords;
+
+let matched = false;
+
+for(let key in keywords){
+
+if(transcript.includes(key)){
+
+currentStage = keywords[key];
+
+updateScene();
+
+matched = true;
+
+statusText.innerText = '✅ Correct response!';
+break;
+
+}
+
+}
+
+if(!matched){
+
+statusText.innerText = '❌ Try again more clearly.';
+
+}
+
+};
+
+updateScene();
+
+</script>
+
+</body>
+</html>
