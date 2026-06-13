@@ -127,32 +127,33 @@ border-radius:10px;
 const scriptTree = {
 
 'start':{
-text:'Grandpa, I enjoy playing folk games with my cousins, but I still miss using my smartphone.',
+
+text:'Phong: "Grandpa, I enjoy playing folk games with my cousins, but I still miss using my smartphone."',
 
 img:'village.jpg',
 
 keywords:{
-'folk games':'games_scene',
-'smartphone':'technology_scene',
-'phone':'technology_scene'
+'play outside':'games_scene',
+'smartphone later':'technology_scene',
+'use my smartphone':'technology_scene'
 },
 
 options:[
-'I enjoy playing folk games with my cousins.',
-'I still want to use my smartphone.'
+'You should play outside more often.',
+'You can use your smartphone later.'
 ]
 },
 
 'games_scene':{
 
-text:'Grandpa: When I was young, we loved playing outside together. We did not depend on technology to have fun.',
+text:'Grandpa: "When I was young, we loved playing hide-and-seek and tag together. We did not depend on smartphones to have fun."',
 
 img:'folk_games.jpg',
 
 keywords:{
-'family':'family_scene',
+'extended family':'family_scene',
 'memorise':'family_scene',
-'extended family':'family_scene'
+'family':'family_scene'
 },
 
 options:[
@@ -163,13 +164,13 @@ options:[
 
 'technology_scene':{
 
-text:'Grandpa: Technology is useful, but outdoor activities can replace too much screen time.',
+text:'Grandpa: "Technology is useful, but outdoor activities can replace too much screen time and help you become healthier."',
 
 img:'smartphone.jpg',
 
 keywords:{
 'replace':'outdoor_scene',
-'outdoor':'outdoor_scene',
+'healthier hobbies':'outdoor_scene',
 'pursue':'outdoor_scene'
 },
 
@@ -181,25 +182,52 @@ options:[
 
 'family_scene':{
 
-text:'Phong: I enjoy listening to your stories and learning about various folk games. 🎉',
+text:'Grandpa: "Spending time with family is important. You can learn many meaningful things from them."',
 
 img:'family.jpg',
 
-keywords:{},
-options:[]
+keywords:{
+'various':'ending_scene',
+'folk games':'ending_scene',
+'stories':'ending_scene'
+},
+
+options:[
+'I enjoy learning about various folk games.',
+'I love listening to your stories.'
+]
 },
 
 'outdoor_scene':{
 
-text:'Phong: I understand now. I should not depend on technology too much. 🌳🎉',
+text:'Grandpa: "That is a good idea. Outdoor activities can make you happier and healthier."',
 
 img:'outdoor.jpg',
+
+keywords:{
+'depend on':'ending_scene',
+'technology':'ending_scene',
+'happier':'ending_scene'
+},
+
+options:[
+'I should not depend on technology too much.',
+'I feel happier when I play outside.'
+]
+},
+
+'ending_scene':{
+
+text:'Phong: "Thank you, Grandpa. I understand that simple moments with family are very meaningful." 🎉',
+
+img:'happy_family.jpg',
 
 keywords:{},
 options:[]
 }
 
 };
+
 
 let currentStage = 'start';
 
